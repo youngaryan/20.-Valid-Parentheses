@@ -1,23 +1,29 @@
+import java.util.Stack;
+
 public class Solution {
     public boolean isValid(String s) {
-        int norm = 0;
-        int curly = 0;
-        int straight = 0;
+        //((
+        //({)}
+        //([}}])
+        if (s.length()%2 != 0) return false;
 
-        if (s.length()%2 != 0)
-            return false;
+        Stack<Character> stack = new Stack<>();
 
-        for (int i = 0; i < s.length(); i++) {
-            switch (s.charAt(i)) {
-                case '(' -> norm++;
-                case '[' -> straight++;
-                case '{' -> curly++;
-                case ')' -> norm--;
-                case ']' -> straight--;
-                case '}' -> curly--;
+        for (char c : s.toCharArray()){
+            if (c == '('|| c =='['||c =='{')
+                stack.push(c);
+            else if (c == ')' && !stack.isEmpty() && stack.peek() == '(') {
+                stack.pop();
             }
+            else if (c == '}' && !stack.isEmpty() && stack.peek() == '{') {
+                stack.pop();
+            }
+            else if (c == ']' && !stack.isEmpty() && stack.peek() == '[') {
+                stack.pop();
+            }
+
         }
 
-        return norm==0&&curly==0&straight==0;
+        return stack.isEmpty();
     }
 }
